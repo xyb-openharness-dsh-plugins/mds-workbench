@@ -1,0 +1,6 @@
+- insert:
+    - id: mds-main
+      name: "@xyb-community/mds-workbench"
+      # config.root 由宿主注入业务根目录（缺一装机必挂）
+      config:
+        root: !!js dshHomePath('mds')
