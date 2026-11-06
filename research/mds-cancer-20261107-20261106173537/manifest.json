@@ -1,0 +1,45 @@
+{
+  "topic": "myeloma",
+  "year": "2026",
+  "snapshotDate": "2026-11-07",
+  "tool": "unified-trial-mcp @ /Users/qinxiaoqiang/Downloads/unified_search_trials/dist/src/cli/main.js",
+  "queries": [
+    {
+      "keyword": "骨髓增生异常综合征",
+      "note": "中文标准名"
+    },
+    {
+      "keyword": "骨髓增生异常肿瘤",
+      "note": "中文指南题名口径"
+    },
+    {
+      "keyword": "MDS",
+      "note": "英文缩写（宽口径，去重靠 recordId）"
+    },
+    {
+      "keyword": "myelodysplastic syndromes",
+      "note": "英文标准名"
+    },
+    {
+      "keyword": "myelodysplastic neoplasms",
+      "note": "英文指南题名口径"
+    }
+  ],
+  "perSourceLimit": 200,
+  "honesty": {
+    "offlineCorpora": "ChiCTR/CDE/CTV 离线语料仅胰腺癌覆盖；MM 只依赖在线通道终态，见 source_statuses 表",
+    "statusWording": "登记 ≠ 有效 ≠ 安全 ≠ 可入组；状态一律\"登记状态，未核实\"",
+    "mergeRule": "仅同一登记号（NCT/ChiCTR/CDE 等）合并，其余并排保留来源"
+  },
+  "recordCount": 335,
+  "dbCount": 335,
+  "sourceStatusRows": 30,
+  "files": {
+    "trials-2026.jsonl": {
+      "sha256": "107338cae2f29eb4e366bda13cde87f11d7b867c04bb51da5ed127c6d5d8d635"
+    },
+    "mds_cancer_trials_2026.sqlite": {
+      "sha256": "00dca6093cfbf5b73de129868f83aaf49e1c6e661a43900bdc03dbe566e6321c"
+    }
+  }
+}
