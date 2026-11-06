@@ -1,44 +1,67 @@
 # 小髓宝 MdsPal 骨髓增生异常综合征工作台（品牌占位）
 
-本机优先的骨髓增生异常综合征确诊档案、血象随访节律、输血记录与铁监测、疗程循环、感染与出血日常观察、就诊沟通工作台
+面向 MDS 患者与家属照护者的本机病程工作台：确诊依据登记、血象随访、输血与铁监测、疗程折叠、日常观察医嘱原话、就诊准备。**v0.2.0 为 HTML 交互原型（合成演示数据），未接入 DSH / AI / 云端解析，未实现真实业务。**
 
-这是接入骨架，尚未实现真实业务。初始化后先将 [项目设计提示词](docs/DESIGN-PROMPT.md) 交给当前Agent；它应展示实际路径并以已有用户/场景/流程素材对齐设计者、研究与取舍原则。癌种项目另有 [完整专用提示词](prompts/NEW-CANCER-WORKBENCH.md)。需求见 [BRIEF](docs/BRIEF.md)，规格见 [SPEC](docs/SPEC.md)，任务见 [TASKS](docs/TASKS.md)；先读 [AGENTS](AGENTS.md)。CLI输出交接与首问，实际对话由Agent接续。
+## 疾病概要
 
-## 开发顺序
+> 整体属解释层：只整理公开信息，不判断你的病情。顶栏「?」可打开四段整页浮窗（定义 → 医学资料规范和指南情况 → 治疗全景 → 发展趋势），每段带来源行；全部来源为题录（未取得原件，据二次来源），验收探针 `node scripts/probe-disease-primer.mjs --url http://127.0.0.1:8124/prototypes/v0.2/index.html` 10/10。
 
-先共创SPEC和候选数据关系，再交付HTML交互工作台；由用户确认对应版本/模块后，复核SCHEMA/API并实现生产功能。确认记录见docs/PROTOTYPE-REVIEW.md；模型不依赖前端Tab/流程。模板骨架不是业务已确认。
+骨髓增生异常综合征（myelodysplastic syndromes，MDS）是一组起源于骨髓造血干/祖细胞的肿瘤性疾病：造血细胞发育异常、有效造血减少，部分患者会进展为急性髓系白血病。诊断靠骨髓穿刺/活检、染色体与基因检测组合判断——本台把这些报告原文抄进档案，不下诊断。风险分层（IPSS-R 等）只登记医生原话，不自动计算。命名口径：中国 2026 年版全国指南题名用「骨髓增生异常肿瘤」，本台界面沿用「综合征」，登记时抄医生原文。
 
-## 当前能力
+**来源**：NCCN MDS v2.2025 · 题录（正文未取得）｜《骨髓增生异常肿瘤诊断与治疗中国指南（2026年版）》· 题录 ｜ NCCN 患者版 PDF · 未下载未审阅 ｜ 完整台账见 [docs/SOURCES.md](docs/SOURCES.md)。
 
-- 一个 DSH 工作台注册、认证的健康接口、版本展示与标准/大字切换。
-- 已明确选择布局：business-first。business-first 使用 customFrame；模板不创建会话或复制聊天。需要 AI 协助时按官方合同接入原生 conversation 和会话管理。
-- 无业务数据库、无演示患者、无真实密钥；所有业务页按确认 spec 逐项实现。
+## 关键功能（截图墙）
 
-## 开发与本地验收
+**看板：输血节奏 + 整页视图入口 + 感受/指标并置**（档案 A 低危初诊）
+![看板](docs/shots/v0.2.0-home-profile-a.png)
+首屏是「现在到哪一步了」与近 90 天输血节奏；报告、化验、大图都开整页，不塞弹窗。
 
-需要 Node.js 22+、Git、包管理器和可用 DSH Desktop；采用 SQLite 时另核验 node:sqlite 版本条件。宿主 peers 的范围仅是模板基线，请与目标 Desktop 实际依赖核对。
+**两套合成档案切换：A 记录少 / B 记录多**
+![档案 B](docs/shots/v0.2.0-home-profile-b.png)
+切换后整页数据联动不串档；B 档案展示高危治疗路径的完整形态。
+
+**血象指标卡：194px 定高 3D 翻转**
+![指标卡翻面](docs/shots/v0.2.0-labs-card-flipped.png)
+正面是最近值/较上次/次数/来源；背面是走势——跨机构只画点不连线。
+
+**治疗与疗程：一次疗程一张折叠卡（收/展两态）**
+![折叠卡收起](docs/shots/v0.2.0-treatment-folds-closed.png)
+![折叠卡展开](docs/shots/v0.2.0-treatment-fold-open.png)
+收起看进度与最低点，展开看每天记录；计次与演示数据逐条对账一致。
+
+**输血与铁监测：只对照、不解读**
+![输血与铁](docs/shots/v0.2.0-transfusion-iron.png)
+铁蛋白趋势与累计输血量并排展示；因果与处置问医生。
+
+**病情一图秀：治疗条与数据线分层**
+![一图秀](docs/shots/v0.2.0-one-chart.png)
+每条线按该指标全期归一化（线与线不可比）；单点不连线、空窗口给空态。
+
+**疾病概要：顶栏 ？ 整页四段**
+![疾病概要](docs/shots/v0.2.0-disease-primer.png)
+「返回」与「关闭」两个独立入口；Esc 退一层；关闭后焦点回到触发按钮。
+
+## 怎么用
+
+双击打开 `prototypes/v0.2/index.html`（file:// 可直接运行；或 `python3 -m http.server` 后访问）。左侧切换 9 条一级线；顶栏「?」开疾病概要；「档案」按钮切换 A/B 两套合成演示；指标卡点按翻面。所有数据为合成演示，刷新重置。
+
+## 数据与口径
+
+- 演示数据唯一源：`demo/build-demo-data.mjs` 生成 `demo/demo-data.json` 与 `prototypes/v0.2/demo-data.js`（两份逐字一致）；页面不写死数字。
+- 隐私：「家属记录」默认私密，看板提醒 / 导出 / AI 上下文三处共用同一过滤函数，页内标注「N 条中私密 M 条」。
+- 医学红线：不做诊断/危险分层/治疗建议；阈值与参考范围一律【待核】；0 患者访谈、0 临床审核如实标注。
+- 试验线按 35 号三步（建档→检索→匹配结果）：三态字段对照、无匹配指数、无判读列、状态未核实以官方库为准。
+
+## 开发
 
 ```bash
-npm install
-npm run check
-npm run pack:check
-npm pack
+npm run check        # 静态合同 + 探针覆盖 + 版本 + primer 链接（全绿）
+npm test             # 单测
+node demo/build-demo-data.mjs                                  # 重新生成演示数据
+node scripts/probe-disease-primer.mjs --url http://127.0.0.1:8124/prototypes/v0.2/index.html   # P1–P9（10/10）
+node scripts/probe-page-view.mjs --url http://127.0.0.1:8123/prototypes/v0.2/index.html        # A1–A10（13/13）
+node scripts/probe-mds-checks.mjs                              # C/MT/Q 证据（27/27）
+node scripts/capture-shots.mjs                                 # 重新截图（版本号入文件名）
 ```
 
-`npm run check` 只保证"能装"（语法 + 装包合同），第一天就该是绿的。`npm run audit` 管"还是不是家族里的一员"：版本三处一致、`lib/layout.js` 面板参数单一来源、检查链完整、文档与密钥卫生，**只看代码与文件，不看文档自述**。新项目刚生成时 audit 必然有 fail，那是待办清单；交付/发布前必须清零，存在 fail 不得发布（`npm run release:check` 一次跑完两者）。
-
-跑的时间点：**每次改完**跑 `check`；**G2 原型确认后、写业务代码前**先跑一次 `audit`（这时缺的多是 `lib/layout.js`、`VERSION` 这类结构，越早补越便宜）；**交付/装机前**必须跑 `release:check`；**发布或投稿前**把 `npm run audit --json` 的 `xx/xx 通过 · N 失败 · M 待人工` 抄进 `docs/RELEASE.md` 的「家族一致性」一行。`✗` 是结构缺口（补齐，或在 `docs/DEV-REQUIREMENTS-<日期>.md` 写明偏离理由并由用户确认），`!` 是需人工判断的项（逐条给「已人工确认 / 确实没有」）。
-
-`npm install` 可能按 npm 策略解析 peer；勿为消警告重复打包宿主 runtime。客户端本身是单文件；引入 TS/组件库后需添加构建步骤并保留单文件导出。
-
-本地安装入口以当前 Desktop/CLI 帮助为准。安装后按 [docs/06-VALIDATION-AND-RELEASE.md](docs/06-VALIDATION-AND-RELEASE.md) 与官方自测完成真实 UI 验收，并填写 [docs/ACCEPTANCE.md](docs/ACCEPTANCE.md)。静态检查不代表已加载。
-
-Logo 来源与使用限制见 assets/README.md。许可证、作者、仓库/发布策略由本项目维护者确认后填写；模板默认为 private/UNLICENSED。
-
-感谢小x宝社区、DataElement 社区，以及 sam / hhx / 繁华的 ❤️ 贡献。
-
-初始化来源记录见 `.dsh-wb-starter.json`。更新社区脚手架不会覆盖本项目；需要升级时先用相同确认配置在临时目录生成，再审阅差异。CLI 用法见 [docs/CLI-GIT.md](docs/CLI-GIT.md)。
-
-## HTML先行与数据演进
-
-业务开发前先交付HTML交互工作台原型、实际预览并由用户确认版本/hash和范围。数据设计先区分领域事实、流程状态和页面读模型，走查前端/流程变化、兼容与迁移；原型对象不直接作为表。见[规范](docs/14-HTML-AND-DATA-CONTRACT.md)。
+文档：[SPEC](docs/SPEC.md) · [DEV-PLAN](docs/DEV-PLAN.md) · [DIFF-MATRIX](docs/DIFF-MATRIX.md) · [SCENARIOS](docs/SCENARIOS.md) · [CLINICAL-DATA](docs/CLINICAL-DATA.md) · [INTERACTION-DESIGN](docs/INTERACTION-DESIGN.md) · [PROGRESS](PROGRESS.md)。认领：[Issue #63](https://github.com/xyb-openharness-dsh-plugins/.github/issues/63)。

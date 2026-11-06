@@ -1,0 +1,15 @@
+PASS  A1  只有 .pv-body 内滚，背景文档滚不动（真滚轮打遮罩）  — {"docOverflow":true,"bodyOverflow":true,"scrollable":true,"htmlOverflowY":"visible","lockClass":false,"y0":2,"y1":2,"bgScrollable":false}
+PASS  A9  顶栏标题为实际页名  — 病理报告
+PASS  A10  返回与关闭两个入口都在且都可见  — ← 返回 | 关闭
+PASS  A4a  打开后焦点进入层内（不留在 body）
+PASS  L3  可以往下长到第三层（三级路径可读）
+PASS  A2  Esc 只退一层（三层 → 二层，浮层仍开）  — {"open":true,"title":"病理报告"}
+PASS  A3  浏览器返回键退到上一状态（此处回主页）  — {"open":false}
+PASS  A5  关掉后主页停在原来的滚动位置  — 2 → 2
+PASS  A4b  关闭后焦点回到触发元素（不是 body）  — {"tag":"BUTTON","isTrigger":true}
+PASS  A7  带 #page= 的地址刷新后直达该页  — {"open":true,"title":"化验记录"}
+PASS  A6  390 宽不横向溢出（内容区/面板/文档三处）  — {"body":{"w":390,"c":390},"panel":{"w":390,"c":390},"doc":{"w":390,"c":390}}
+PASS  A8  减少动效下终态完全可见  — {"opacity":1,"anim":"none","visible":true}
+PASS  E0  全程 0 未捕获异常
+
+PASS  13/13

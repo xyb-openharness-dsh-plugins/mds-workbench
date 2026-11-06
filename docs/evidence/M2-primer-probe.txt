@@ -1,0 +1,13 @@
+PASS  P1  顶栏存在可点的「?」，aria-label 说明四段内容  — text="?" label="疾病概要：骨髓增生异常综合征是什么？定义、医学资料与指南情况、治疗全景、发展趋势"
+PASS  P2  四段标题齐全且顺序正确  — definition › evidence › landscape › trend
+PASS  P3  面板铺满视口（宽高均 ≥ 视口的 90%）  — 1249×829 / 视口 1280×860
+PASS  P4  打开压一条 history；history.back() 后面板收起  — history.length=3 · 返回后 open=false hash=""
+PASS  P5  「返回」与「关闭」是两个独立可见入口  — back=true close=true same=false
+PASS  P7  Esc 收起概要且仍在本页（只退一层）  — open=false url=/prototypes/v0.2/index.html
+PASS  P6  关闭后焦点回到触发按钮，滚动位置不变  — focusOnTrigger=true scrollY=2→2
+PASS  P8  数据四段齐全、每段有来源、趋势段无禁止词
+PASS  P9  排版对齐：正文/列表/表格/来源行同左基线、右边界极差 ≤2px（三档）  — 1440/900/390 三档均对齐
+PASS  E0  页面无 JS 报错、无 console error
+
+  10/10 通过
+

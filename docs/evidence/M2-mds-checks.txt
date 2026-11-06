@@ -1,0 +1,29 @@
+PASS  Q9  档案切换后页头显示档案名（B）  — 郑淑芬的资料
+PASS  C1  量纲不同的线都占满纵向区（全期各自归一化）  — 高差比=1 系列数=2
+PASS  C4  关治疗条不改曲线（path[d] 逐条相同且非空）  — 条数=2
+PASS  C5  只标末点：数值标签数 ≤ 系列数  — 标签=2 系列=2
+PASS  C6  标签不越界  — 越界=0
+PASS  C8  时间窗联动（切近 3 月后点数减少）  — 每系列段数=7,7 首刻度=9月
+PASS  C2  单点不连线（无 path，有 circle）  — {"paths":0,"circles":1}
+PASS  C3  空窗口给空态（含提示文字且 svg 非空）  — svg子节点=3
+PASS  C10  减少动效下曲线立即可见（无描线动画）  — {"none":true}
+PASS  C11  翻转不位移且内层为 3D 矩阵  — {"topSame":true,"hSame":true,"h":194,"matrix3d":true,"pressed":"true"}
+PASS  C12  翻转独立（只按下这张卡）  — {"oneTrue":true,"total":5}
+PASS  MT07  点两次恢复正面，页面高度不变  — 高度 862→862
+PASS  MT08  键盘可达 + 正面态隐藏面 inert/aria-hidden  — {"focused":true,"backHiddenWhenFront":true,"pressedNow":"false"}
+PASS  MT08b  翻面后背面可交互  — {"pressed":"true","backVisibleNoInert":true}
+PASS  MT04  正面完整：类别/名/值/单位/日期/次数/来源，差值无疗效结论  — {"hasCat":true,"hasVal":true,"hasUnit":true,"hasDate":true,"hasSrc":true,"hasCount":true,"noVerdict":true}
+PASS  MT06  跨机构铁蛋白：不连线、只画点  — {"paths":0,"circles":8,"note":true}
+PASS  Q10  A↔B 切换整页联动不串档  — {"a":"吴建国的资料","b":"郑淑芬的资料"}
+PASS  IP2/X1  页面全覆盖：9 条一级线全部可达，孤儿页=0  — {"pageButtons":9,"visited":17,"emptyViews":0,"uniq":17}
+PASS  Q14/IP10  每个一级页有「和 AI 讨论」入口（mds:agent-draft 链接）  — 缺=无
+PASS  Q19  AI 携带上下文只含事实（无判定词）  — 命中=无
+PASS  Q26@1180  1180px 无横向溢出  — {"sw":1180,"cw":1180}
+PASS  Q26@900  900px 无横向溢出  — {"sw":900,"cw":900}
+PASS  Q26@390  390px 无横向溢出  — {"sw":390,"cw":390}
+PASS  Q11  缺字段/未知日期/无原件在页面可见  — {"unknownDate":true,"noFile":true}
+PASS  Q35  私密三出口共用过滤函数 + 页内「N 条中私密 M 条」  — {"filterInExport":true,"oneFilterFn":true,"labelShown":true}
+PASS  红线  禁词 0 命中（界面文案）  — 无
+PASS  E0  全程 0 未捕获异常
+
+PASS  27/27
