@@ -1,56 +1,12 @@
-# 数据主体—关系—表
+# SCHEMA · 数据模型口径
 
-| 实体 | 稳定 ID | 主体/外键 | 核心字段/类型 | 约束/索引 | 来源/确认 | 生命周期 |
-| --- | --- | --- | --- | --- | --- | --- |
-| subject | ... | ... | ... | ... | ... | ... |
-| document | ... | subject | relative_path/hash/mime | ... | original | ... |
-| observation | ... | subject/metric_definition | time/value/unit | ... | candidate/confirmed | ... |
-| artifact | ... | task/snapshot | relative_path/hash/format | ... | template version | ... |
-
-实体图：...
-扩展策略：定义目录新增 vs 结构迁移的边界；核心关系不塞入任意 JSON。
-迁移 ledger/旧库 fixture/备份/事务/回滚兼容：...
-数据根选择、相对路径校验、公共数据和私人数据分离：...
-统一读模型与跨页一致性验收：...
-
-## 持久化与记忆选型（互动确认）
-
-等级 A/B/C/D 与理由：...
-预计规模/增长、常用查询、并发写入者、离线要求：...
-SQLite 或 JSON 的实际运行条件与备选方案：...
-
-| 数据类别 | 权威位置/格式 | 读写责任 | 来源/revision | 索引/失效/保留规则 |
-| --- | --- | --- | --- | --- |
-| 已确认业务事实 | ... | ... | ... | ... |
-| 文件与产物 | ... | ... | ... | ... |
-| 偏好/摘要/检索记忆（可选） | ... | ... | ... | ... |
-| 可重建内存缓存/派生索引 | ... | ... | ... | ... |
-
-同步：提交后更新、幂等键、重试、积压可见性：...
-检索：主体/工作区过滤、来源核对、过期与冲突处理：...
-纠正/删除：缓存与记忆失效、删除传播：...
-外部记忆的实际 API/版本/部署/发送范围；不可用时的本地路径：...
-性能证据：代表数据、查询延迟/启动、内存测量与目标：...
-确认人/日期、未决项及对应验收 ID：...
-
-## 前端与业务流程变化矩阵（建库前必填）
-
-领域事实/关系、工作流定义与实例、页面读模型/偏好边界：...
-稳定ID/revision、流程定义版本/已有实例、状态转换与跳过/重开/取消语义：...
-
-| 变化情境 | 不变的事实/关系 | 配置/投影/API变化 | 迁移/旧记录读取与恢复 | 验收证据 |
-| --- | --- | --- | --- | --- |
-| 改导航/布局/同一事实多视图 | ... | ... | ... | ... |
-| 新字段/指标/可选记录类型 | ... | ... | ... | ... |
-| 步骤插入/跳过/重开/并行 | ... | ... | ... | ... |
-| 来源更正/删除/摘要与缓存失效 | ... | ... | ... | ... |
-| 旧数据库/旧API客户端升级 | ... | ... | ... | ... |
-
-不把UI模拟数据当表，不为每个步骤复制事实；不通过无限JSON、重置库或无理由的全量事件溯源代替设计。详见docs/14-HTML-AND-DATA-CONTRACT.md。
-
-
-## UI/流程变化的承受能力（必填）
-
-领域实体/证据/主体/状态/版本是稳定核心；UI通过命令用例写入和版本化读模型读取。不能按Tab复制事实或把整页state当业务存储。列出：页面拆合/移位、流程先后改变、新增普通指标、来源更正、候选→接受、未知字段/枚举、隐私派生与快照失效时需要改哪层、是否迁移、兼容/恢复方式。
-
-HTML确认前是候选模型/模拟adapter，确认对应模块后复核并落实生产schema/API；仅布局/字段顺序变化不能迫使用户清库。JSON扩展有类型/schema/version/上限，核心关系保留外键与约束；写入有revision/幂等/事务。记录真实迁移/并发/故障证据，未执行标未验证。
+- 当前版本：schema/0001_initial.sql（18 表，冻结 sha256 见 schema/freeze-contract.md）
+- 分域：档案（profiles/documents）· 指标（metric_defs/lab_reports/metric_points）· 通用（medications/cycles/cycle_days/symptom_logs/doctor_orders/family_notes/questions）· MDS 专属（transfusions/dx_facts/trial_items）· 导入（import_jobs/candidates/exports_log）
+- 关键口径：
+  1. 医生结论只存原话（dx_facts.quote_text），无 IPSS-R/WHO 推导列（check-schema BANNED 断言 0 命中）
+  2. 输血一等实体（transfusions 按次一行，pre_hb_num 显式 NULL）
+  3. 可比组 = metric_points.site_method_text 原样登记，读时分组，不合并
+  4. family_notes.private_flag 行级私密；三出口共用读取层过滤
+  5. 更正=新增版本（metric_points.superseded_by）；questions 弃用不删
+  6. 派生值读时算不落库：90 天节奏/累计单位/疗程最低点/私密计数
+- 语境与私密策略明细：docs/DEV-REQUIREMENTS.md §二；未决（M5 读模型实现时复核）：metric_points 与 lab_reports 的 site/method 拆分粒度
