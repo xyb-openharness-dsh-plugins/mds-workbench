@@ -542,13 +542,15 @@ function dailyPage(p) {
   const orders = p.daily || [];
   const notes = p.privateNotes || [];
   const symptoms = p.symptoms || [];
+  /* IP6：每页显式编辑入口 ≤1 —— 两个手工入口收进「⋯ 更多」 */
+  const moreMenu = `<details class="more-menu"><summary class="chip" aria-label="更多操作">⋯ 更多</summary><div class="more-body">${btn('记一条医嘱原话（演示）', 'daily-add')}${btn('记一条感受（演示）', 'symptom-add')}</div></details>`;
   return head('日常观察', SUBTITLES.daily, aiBtn('daily')) +
-  section('医生交代的观察要点（原话）', '只显示患者已确认的医嘱原话；本台不生成通用建议。', btn('记一条医嘱原话（演示）', 'daily-add')) +
+  section('医生交代的观察要点（原话）', '只显示患者已确认的医嘱原话；本台不生成通用建议。', moreMenu) +
   (orders.length ? `<div class="grid g2">${orders.map((o) => `<div class="card"><p style="margin:0 0 6px">${esc(o.text)}</p><p class="small muted" style="margin:0">来源：${esc(o.source)}</p></div>`).join('')}</div>` :
-    `<div class="empty"><b>还没有登记的医嘱原话</b>下次复诊时把医生交代的观察要点原话记进来<div class="actions">${btn('记一条医嘱原话（演示）', 'daily-add')}</div></div>`) +
+    `<div class="empty"><b>还没有登记的医嘱原话</b>用「⋯ 更多」把医生交代的观察要点原话记进来<div class="actions">${btn('记一条医嘱原话（演示）', 'daily-add')}</div></div>`) +
   section('家庭记录', pr.total ? `${pr.total} 条中私密 ${pr.hidden} 条（默认私密：看板提醒、导出、AI 上下文三处都不出现）。` : '默认私密。') +
   (notes.length ? `<div class="grid g2">${notes.map((n) => `<div class="card"><p style="margin:0 0 6px">${esc(n.text)}</p><p class="small muted" style="margin:0">${esc(n.role)} · ${esc(longDate(n.d))} ${n.private ? pill('私密', 'grey') : ''}</p></div>`).join('')}</div>` : '<div class="empty"><b>没有家庭记录</b>这一栏只有家人自己看；默认不进任何导出与 AI</div>') +
-  section('感受记录', '轻中重是当事人自己的标记，不是分级。', btn('记一条感受（演示）', 'symptom-add')) +
+  section('感受记录', '轻中重是当事人自己的标记，不是分级。') +
   (symptoms.length ? `<div class="table-wrap"><table><thead><tr><th>日期</th><th>感受</th><th>程度（自评）</th><th>说明</th></tr></thead><tbody>${symptoms.map((s) => `<tr><td class="nowrap">${esc(longDate(s.d))}</td><td>${esc(s.label)}</td><td>${['', '轻', '中', '重'][s.level] || '—'}</td><td class="small">${esc(s.note)}</td></tr>`).join('')}</tbody></table></div>` : '<p class="muted small">暂无感受记录。</p>');
 }
 /* ---------------- 临床研究（35 号三步：建档→检索→匹配结果） ---------------- */

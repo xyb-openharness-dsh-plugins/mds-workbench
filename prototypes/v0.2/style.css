@@ -10,6 +10,7 @@
   --danger: #b23f2c; --warn: #a8650a; --warn-bg: #faf3e2; --ok: #2f7d6b;
   --accent-transf: #c4703a; --accent-transf-bg: #f9ede2;
   --accent-iron: #6f5f9e; --accent-iron-bg: #efecf7;
+  --grey-dot: #b9c4bf; --row-hover: #f4f9f7; --ai-bg: #eaf3f9; --ai-ink: #235e78;
   --radius: 16px; --gap: 14px;
   --shadow-pop: 0 12px 40px rgba(24, 48, 40, .18);
 }
@@ -64,7 +65,7 @@ a.skip:focus { left: 0; }
 .top-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .top-actions .status { display: flex; align-items: center; gap: 7px; font-size: 12.5px; border-radius: 999px; padding: 5px 12px; min-height: 36px; }
 .top-actions .status i { width: 9px; height: 9px; border-radius: 50%; background: var(--ok); }
-.top-actions .status i.grey { background: #b9c4bf; }
+.top-actions .status i.grey { background: var(--grey-dot); }
 .top-actions .status b { font-weight: 600; }
 .icon-button { width: 40px; min-width: 40px; padding: 0; border-radius: 50%; font-weight: 700; font-size: 16px; min-height: 40px; }
 .ver-chip { border-radius: 999px; font-size: 12.5px; padding: 5px 12px; min-height: 36px; color: var(--muted); }
@@ -103,12 +104,12 @@ table { border-collapse: collapse; width: 100%; font-size: 13px; }
 th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); white-space: nowrap; }
 th { font-size: 12px; color: var(--muted); font-weight: 600; background: #fbfdfc; position: sticky; top: 0; }
 tbody tr:last-child td { border-bottom: 0; }
-tbody tr:hover { background: #f4f9f7; }
+tbody tr:hover { background: var(--row-hover); }
 .primary { background: var(--action); color: var(--action-ink); border: 0; }
 .soft { background: var(--soft); color: var(--soft-ink); border-color: transparent; }
 .linkish { border: 0; background: none; color: var(--brand); padding: 2px 0; min-height: 0; }
 .chip { display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 4px 12px; font-size: 12.5px; background: var(--soft); color: var(--soft-ink); text-decoration: none; min-height: 30px; }
-.chip.ai-link { background: #eaf3f9; color: #235e78; }
+.chip.ai-link { background: var(--ai-bg); color: var(--ai-ink); }
 .text-danger { color: var(--danger); }
 .muted { color: var(--muted); }
 .small { font-size: 12.5px; }
@@ -205,3 +206,9 @@ textarea { min-height: 74px; resize: vertical; }
   .kv dt { margin-top: 6px; }
   .top-actions .status span { display: none; }
 }
+
+/* ---------- ⋯ 更多菜单（IP6） ---------- */
+.more-menu { position: relative; display: inline-block; }
+.more-menu > summary { list-style: none; cursor: pointer; }
+.more-menu > summary::-webkit-details-marker { display: none; }
+.more-menu .more-body { position: absolute; right: 0; top: calc(100% + 6px); background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow-pop); padding: 8px; display: flex; flex-direction: column; gap: 6px; z-index: 20; min-width: 200px; }
