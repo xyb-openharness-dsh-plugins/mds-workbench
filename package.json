@@ -44,7 +44,8 @@
     "build:client": "node scripts/build-client.mjs",
     "check:version": "node scripts/check-version.mjs",
     "check:wording": "node scripts/check-wording.mjs",
-    "check:columns": "node scripts/check-demo-columns.mjs"
+    "check:columns": "node scripts/check-demo-columns.mjs",
+    "release:pack": "node scripts/build-client.mjs && node scripts/build-version.mjs && npm pack --pack-destination release"
   },
   "dsh": {
     "bundle": {
