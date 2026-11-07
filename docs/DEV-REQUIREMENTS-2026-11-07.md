@@ -43,3 +43,11 @@
 | 品牌占位名 | 小髓宝 MdsPal（MM 已用小浆宝 MyeloPal，区分明确） | 待用户追认，可整包替换 |
 | 演示数据 | 两套合成档案：A 低危初诊观察等待（记录少、多处未知）；B 高危去甲基化治疗（疗程多、输血多、指标多） | 覆盖 MDS 两条典型路径 |
 | 患者资料目录 | 未指定；装机后由用户在设置页显式选择 | 主目录/桌面/下载根/tmp 拒绝 |
+
+## 三、错误来源与教训（M2–M6 实测追加）
+
+1. **pack 的 files 清单会被静默改丢**（现象：pack-contents 测试红「缺 public/index.html」；根因：脚本化改写 package.json（json.load→dump）时 files 数组与预期不符，public/schema 缺失仍能正常 dev）→ 规则：凡是改 package.json 的脚本，改后必须重跑 `npm test`（pack-contents 真打包断言兜底）；来源：test/pack-contents.test.mjs 实测捕获。
+2. **构建注入的布尔字面量要「不加引号直注」**（现象：check-host-contract 报 `'true' === 'true'` 且捕获值带 `;`；根因：src/client.js 写成 `'__X__' === 'true'` 注入后仍是表达式）→ 规则：常量注入用裸占位 `const X = __X__;`，注入纯字面量；检查器捕获后 trim 尾部分号；来源：scripts/check-host-contract.mjs（本项目副本已修，待回流 starter）。
+3. **演示 sqlite 重建必须先删后建**（现象：`table profiles already exists`；根因：DatabaseSync 打开已存在文件后重复 exec CREATE TABLE）→ 规则：生成器写 sqlite 前先 `rmSync(force:true)`；来源：demo/build-demo-data.mjs。
+4. **check-version 的 FROZEN_PROTOTYPE 是每仓自己的原型签认版本**（现象：8 处版本核对红在快照；根因：模板默认 0.1.0）→ 规则：init 后按实际原型版本改 FROZEN_PROTOTYPE；来源：scripts/check-version.mjs。
+5. **probe-disease-primer 默认打 examples 参考页**（现象：探针绿但没在测本仓原型；根因：默认 URL 是脚手架参考页）→ 规则：必须 `--url .../prototypes/v0.2/index.html`；来源：用户预警 + scripts/probe-disease-primer.mjs L91。
