@@ -13,7 +13,7 @@
  * 运行：node demo/build-demo-data.mjs
  * 校验：npm run check 里由 check-workbench-package.mjs 触发 demo 唯一源比对（M5 起）。
  */
-import { writeFileSync, mkdirSync } from 'node:fs'
+import { writeFileSync, mkdirSync, readFileSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -276,4 +276,15 @@ mkdirSync(join(ROOT, 'prototypes', 'v0.2'), { recursive: true })
 writeFileSync(join(ROOT, 'demo', 'demo-data.json'), json + '\n')
 const banner = '/* 由 demo/build-demo-data.mjs 生成（勿手改）。合成演示数据：人物、数值与时间线不指向任何真实患者。 */\n'
 writeFileSync(join(ROOT, 'prototypes', 'v0.2', 'demo-data.js'), banner + 'window.DEMO_DATA = ' + json + '\n')
-console.log(`demo 唯一源已写出：profile A=${profileA.id}（输血 ${profileA.transfusions.length} 条） profile B=${profileB.id}（输血 ${profileB.transfusions.length} 条 · 疗程 ${profileB.cycles.length} 个） today=${TODAY}`)
+writeFileSync(join(ROOT, 'public', 'demo-data.js'), banner + 'window.DEMO_DATA = ' + json + '\n')
+/* demo/demo-data.sqlite：按 schema 播种（check-demo-columns 与 demo-parity 的比对基准） */
+const { DatabaseSync } = await import('node:sqlite')
+const { readdirSync, rmSync } = await import('node:fs')
+rmSync(join(ROOT, 'demo', 'demo-data.sqlite'), { force: true })
+const db = new DatabaseSync(join(ROOT, 'demo', 'demo-data.sqlite'))
+for (const f of readdirSync(join(ROOT, 'schema')).filter((x) => /^\d{4}_.*\.sql$/.test(x)).sort()) db.exec(readFileSync(join(ROOT, 'schema', f), 'utf8'))
+const { seedDemo } = await import('../dsh/demo.js')
+/* 复用 seedDemo 但指向本 demo 数据（demo.js 读同一份 JSON，一一对应） */
+seedDemo(db)
+db.close()
+console.log('demo sqlite 已按 schema 播种'); console.log(`demo 唯一源已写出：profile A=${profileA.id}（输血 ${profileA.transfusions.length} 条） profile B=${profileB.id}（输血 ${profileB.transfusions.length} 条 · 疗程 ${profileB.cycles.length} 个） today=${TODAY}`)

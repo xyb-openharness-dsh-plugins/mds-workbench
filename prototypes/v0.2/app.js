@@ -9,7 +9,7 @@ const $$ = (s, root = document) => Array.from(root.querySelectorAll(s));
 const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 let uidSeq = 0;
 const uid = (p) => p + (++uidSeq);
-const APP = { name: '小髓宝', en: 'MdsPal', version: 'v0.2.0', build: '2026-11-07', slug: 'mds' };
+const APP = { name: '小髓宝', en: 'MdsPal', version: '0.2.0', build: '2026-11-07', slug: 'mds' };
 const DAY = 86400000;
 const todayISO = () => (window.DEMO_DATA?.meta.today) || new Date().toISOString().slice(0, 10);
 const dayGap = (from, to = todayISO()) => Math.round((Date.parse(`${to}T00:00:00`) - Date.parse(`${from}T00:00:00`)) / DAY);
@@ -124,7 +124,7 @@ const go = (text, page, sub = '', cls = '', attr = '') => btn(text, 'go', cls, `
 const pill = (text, cls = '') => `<span class="pill ${cls || ''}">${esc(text)}</span>`;
 const aiBtn = (key, label = '和 AI 讨论这一页') => {
   const prompt = aiPromptWithCtx(key);
-  return `<a class="chip ai-link" href="${APP.slug}:agent-draft?prompt=${encodeURIComponent(prompt)}" data-ai="${esc(key)}" title="把预写提示词与当前病情上下文带给 AI（回复是候选，核对才采纳）">${esc(label)} ↗</a>`;
+  return `<a class="chip ai-link" href="mds:agent-draft?prompt=${encodeURIComponent(prompt)}" data-ai="${esc(key)}" title="把预写提示词与当前病情上下文带给 AI（回复是候选，核对才采纳）">${esc(label)} ↗</a>`;
 };
 function aiPromptWithCtx(key) {
   const p = prof();
@@ -712,7 +712,7 @@ const EMBEDDED = () => window.parent && window.parent !== window;
 function sendAgentDraft(prompt) {
   if (EMBEDDED()) {
     try {
-      window.parent.postMessage({ type: `${APP.slug}:agent-draft`, prompt, send: true }, location.origin === 'null' ? '*' : location.origin);
+      window.parent.postMessage({ type: 'mds:agent-draft', prompt, send: true }, location.origin === 'null' ? '*' : location.origin);
       toast('已发送到 AI 对话（回复是候选，核对才采纳）');
     } catch { toast('发送失败：内容保留在输入提示里'); }
   } else {
@@ -730,7 +730,7 @@ const actions = {
   close: closeModal,
   settings: settingsModal,
   help: () => openModal('原型操作说明', '<p style="font-size:13.5px">· 左侧切换 9 条一级线；二级页签在标题下方展开。<br>· 顶栏「?」打开疾病概要（36 号，整页四段）。<br>· 「AI 协助 ↗」是 mds:agent-draft 协议链接（34 号）：嵌入式直接发送；独立打开走演示面板（未接入）。<br>· 指标卡点按翻面（3D，194px 定高）。<br>· 全部数据为合成演示，刷新重置。</p>'),
-  about: () => openModal('关于小髓宝', `<dl class="kv"><dt>版本</dt><dd>${APP.version}</dd><dt>构建日期</dt><dd>${APP.build}</dd><dt>形态</dt><dd>HTML 交互原型（全部合成演示数据）</dd><dt>接入</dt><dd>未接入 DSH / AI / 云端解析</dd></dl>`),
+  about: () => openModal('关于小髓宝', `<dl class="kv"><dt>版本</dt><dd>v${APP.version}</dd><dt>构建日期</dt><dd>${APP.build}</dd><dt>形态</dt><dd>HTML 交互原型（全部合成演示数据）</dd><dt>接入</dt><dd>未接入 DSH / AI / 云端解析</dd></dl>`),
   font: () => {
     const large = document.body.classList.toggle('large');
     $('#font-toggle').setAttribute('aria-pressed', String(large));
@@ -780,7 +780,7 @@ const actions = {
 };
 document.addEventListener('click', (e) => {
   const t = e.target;
-  const ai = t.closest('a[href^="' + APP.slug + ':agent-draft"]');
+  const ai = t.closest('a[href^="mds:agent-draft"]');
   if (ai) { e.preventDefault(); sendAgentDraft(aiPromptWithCtx(ai.dataset.ai)); return; }
   const pvTrigger = t.closest('[data-open]');
   if (pvTrigger) { PV.open(pvTrigger.dataset.open, pvTrigger); return; }
