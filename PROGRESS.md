@@ -12,3 +12,8 @@
 - 各闸口结论：G1/G2/G3/V1 自动签认（待晨审追认）
 - 下一步：M6 pack→装真实 Desktop profile→真机走查（不可用如实写未验证）
 - 阻塞：无
+
+## 最终 2026-11-07 06:20
+- M0–M9 全链完成；G1/G2/G3/V1/V2 自动签认，V3 未验证（待用户重启 Desktop）
+- check exit=0 · audit 40/40 · 测试 23/23 · 探针 50 断言 · starter 回流 rc.20 自检全绿
+- 晨审入口：MORNING-REVIEW.md（六节）
