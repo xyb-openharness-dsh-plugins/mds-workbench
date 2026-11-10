@@ -1,6 +1,6 @@
 {
   "name": "@xyb-community/mds-workbench",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "本机优先的骨髓增生异常综合征确诊档案、血象随访节律、输血记录与铁监测、疗程循环、感染与出血日常观察、就诊沟通工作台",
   "private": true,
   "type": "module",
@@ -22,7 +22,7 @@
     "NOTICE.md"
   ],
   "scripts": {
-    "check": "node scripts/build-version.mjs && node --disable-warning=ExperimentalWarning demo/build-demo-data.mjs && node scripts/check-version.mjs && node --check dsh/index.js && node --check dsh/store.js && node --check dsh/demo.js && node --check dsh/readmodels.js && node --check dsh/routes.js && node --check dsh/server.js && node --check lib/client.js && node scripts/check-wording.mjs && node scripts/check-workbench-package.mjs . && node scripts/check-host-contract.mjs && node scripts/smoke-activate.mjs && node scripts/check-probe-coverage.mjs && node scripts/check-version-literal.mjs && node scripts/check-static-refs.mjs && node scripts/check-choice-limit.mjs && node scripts/check-assertion-strength.mjs && node scripts/check-derivative-leftovers.mjs . && node scripts/check-trial-snapshot.mjs . --if-present && node scripts/check-primer-links.mjs && node scripts/check-schema.mjs . && node scripts/build-client.mjs --check && node --disable-warning=ExperimentalWarning --test test/*.test.mjs",
+    "check": "node scripts/build-version.mjs && node --disable-warning=ExperimentalWarning demo/build-demo-data.mjs && node scripts/check-version.mjs && node --check dsh/index.js && node --check dsh/store.js && node --check dsh/demo.js && node --check dsh/readmodels.js && node --check dsh/routes.js && node --check dsh/server.js && node --check lib/client.js && node scripts/check-wording.mjs && node scripts/check-workbench-package.mjs . && node scripts/check-host-contract.mjs && node scripts/smoke-activate.mjs && node scripts/check-probe-coverage.mjs && node scripts/check-version-literal.mjs && node scripts/check-static-refs.mjs && node scripts/check-choice-limit.mjs && node scripts/check-assertion-strength.mjs && node scripts/check-derivative-leftovers.mjs . && node scripts/check-trial-snapshot.mjs . --if-present && node scripts/check-primer-links.mjs && node scripts/check-schema.mjs . && node scripts/build-client.mjs --check && node --disable-warning=ExperimentalWarning --test test/*.test.mjs && node scripts/check-agent-pane-contract.mjs .",
     "check:version-literal": "node scripts/check-version-literal.mjs",
     "check:host": "node scripts/check-host-contract.mjs",
     "check:static-refs": "node scripts/check-static-refs.mjs",

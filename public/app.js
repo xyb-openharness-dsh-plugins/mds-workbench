@@ -1,4 +1,4 @@
-/* 小髓宝 MdsPal · 交互原型 v0.2.0
+/* 小髓宝 MdsPal · 交互原型 v0.2.1
  * 结构基准：小粉宝 v0.4（五 Tab/卡片/3D 翻转/最近报告）+ 小橙宝 v0.2（导航分组/折叠卡/事件泳道/agent-draft 契约）。
  * 全部数据来自 window.DEMO_DATA（demo/build-demo-data.mjs 生成，唯一源，页面不写死数字）。
  * 合成演示：人物、数值与时间线不指向任何真实患者；未接入 DSH / AI。
@@ -9,7 +9,7 @@ const $$ = (s, root = document) => Array.from(root.querySelectorAll(s));
 const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 let uidSeq = 0;
 const uid = (p) => p + (++uidSeq);
-const APP = { name: '小髓宝', en: 'MdsPal', version: '0.2.0', build: '2026-11-07', slug: 'mds' };
+const APP = { name: '小髓宝', en: 'MdsPal', version: '0.2.1', build: '2026-11-07', slug: 'mds' };
 const DAY = 86400000;
 const todayISO = () => (window.DEMO_DATA?.meta.today) || new Date().toISOString().slice(0, 10);
 const dayGap = (from, to = todayISO()) => Math.round((Date.parse(`${to}T00:00:00`) - Date.parse(`${from}T00:00:00`)) / DAY);
